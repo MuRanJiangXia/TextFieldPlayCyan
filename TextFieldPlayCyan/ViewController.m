@@ -83,16 +83,19 @@
         //这就接收最终的text
         NSLog(@"输入好了 %@",text);
         return YES;
-        
+    
     }
-    
-    
     return NO;
 }
 
 #pragma mark  -UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string; {
     if ([string  isEqual: @""]) {
+        //唤起上一个一个textField
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            UITextField *nextTextF =  (UITextField *) [self.view viewWithTag:textField.tag - 1];
+            [nextTextF becomeFirstResponder];
+        });
         return YES;
     }
     if (textField.text.length >=1) {
